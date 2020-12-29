@@ -17,47 +17,47 @@ class TestTop10():
         time.sleep(3)
         self.driver.quit()
 
-    # @pytest.mark.parametrize("args", analyze_file("login_data.yaml", "test_login"))
-    # def test_top1(self,args):
-    #     # 解析yaml数据
-    #     username = args["username"]
-    #     password = args["password"]
-    #     # 选择体验，启动向导
-    #     # self.page.start.skip_start()
-    #     self.checkTopByName("公积金信息查询")
-    #     # 如果未登陆则登陆,再点击
-    #     try:
-    #         self.page.login.confirm_login(username, password)
-    #         time.sleep(3)
-    #         # 公积金信息查询
-    #         self.driver.find_element_by_xpath("//*[@text='公积金信息查询']").click()
-    #     except Exception:
-    #         pass
-    #     time.sleep(6)
-    #     # 退回主页面
-    #     self.driver.find_element_by_id("llbt.ccb.ynga:id/backbtn").click()
-    #     time.sleep(1)
-    #
-    # def test_top2(self):
-    #     self.checkTopByName("查城镇职工养老保险缴费")
-    #
-    # def test_top3(self):
-    #     self.checkTopByName("公积金明细查询")
-    #
-    # def test_top4(self):
-    #     self.checkTopByName("事业单位招聘")
-    #
-    # def test_top5(self):
-    #     self.checkTopByName("查重名")
-    #
-    # def test_top6(self):
-    #     self.checkTopByName("查行政区划")
-    #
-    # def test_top7(self):
-    #     self.checkTopByName("行驶证二维码")
-    #
-    # def test_top8(self):
-    #     self.checkTopByName("律师律所查询")
+    @pytest.mark.parametrize("args", analyze_file("login_data.yaml", "test_login"))
+    def test_top1(self,args):
+        # 解析yaml数据
+        username = args["username"]
+        password = args["password"]
+        # 选择体验，启动向导
+        # self.page.start.skip_start()
+        self.checkTopByName("公积金信息查询")
+        # 如果未登陆则登陆,再点击
+        try:
+            self.page.login.confirm_login(username, password)
+            time.sleep(3)
+            # 公积金信息查询
+            self.driver.find_element_by_xpath("//*[@text='公积金信息查询']").click()
+        except Exception:
+            pass
+        time.sleep(6)
+        # 退回主页面
+        self.driver.find_element_by_id("llbt.ccb.ynga:id/backbtn").click()
+        time.sleep(1)
+
+    def test_top2(self):
+        self.checkTopByName("查城镇职工养老保险缴费")
+
+    def test_top3(self):
+        self.checkTopByName("公积金明细查询")
+
+    def test_top4(self):
+        self.checkTopByName("事业单位招聘")
+
+    def test_top5(self):
+        self.checkTopByName("查重名")
+
+    def test_top6(self):
+        self.checkTopByName("查行政区划")
+
+    def test_top7(self):
+        self.checkTopByName("行驶证二维码")
+
+    def test_top8(self):
+        self.checkTopByName("律师律所查询")
 
     def test_top9(self):
         self.checkTopByName("查出入境业务办理进度")
