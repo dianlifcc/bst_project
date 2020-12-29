@@ -1,0 +1,11 @@
+test_login:
+  test_login_001:
+    username: "15198938874"
+    password: "Birdfcc12345"
+    realname: "付聪聪"
+    toast: Null
+#  test_login_002:
+#    username: "15198938874"
+#    password: "123456"
+#    realname: "付聪聪"
+#    toast: "用户名或密码错误"

@@ -12,6 +12,12 @@ class LoginPage (BaseAction):
     #登录
     login_button = By.XPATH,"//*[@text='登录']"
 
+    # 登录
+    login_button = By.XPATH, "//*[@text='登录']"
+
+    # 确定登录弹框
+    confirm_login_button = By.XPATH, "//*[@text='确定']"
+
     #输入用户名
     def input_username(self,text):
         self.input(self.username_edit_text,text)
@@ -21,3 +27,6 @@ class LoginPage (BaseAction):
     #点击登录
     def click_login(self):
         self.click(self.login_button)
+
+    def confirm_login(self,username,password):
+        self.click_confirm_login(username,password)
