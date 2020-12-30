@@ -16,9 +16,3 @@ class StartPage (BaseAction):
     #同意
     def click_agree(self):
         self.click(self.agree)
-
-    def start_swipeLeft(self):
-        self.swipeLeft()
-
-    def skip_startpage(self):
-        self.skip_start()

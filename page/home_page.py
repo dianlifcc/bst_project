@@ -23,7 +23,7 @@ class HomePage(BaseAction):
             # 输入用户名
             page.login.input_username("15198938874")
             # 输入密码
-            page.login.input_password("Birdfcc12345")
+            page.login.input_password("Birdfcc@12345")
             # 登录
             page.login.click_login()
         except Exception:

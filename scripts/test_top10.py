@@ -62,8 +62,8 @@ class TestTop10():
     def test_top9(self):
         self.checkTopByName("查出入境业务办理进度")
 
-    # def test_top10(self):
-    #     self.checkTopByName("驾驶证二维码")
+    def test_top10(self):
+        self.checkTopByName("驾驶证二维码")
 
     def checkTopByName(self,text):
         time.sleep(3)

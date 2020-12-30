@@ -36,36 +36,34 @@ class BaseAction:
         # 同意
         agree = By.ID, "llbt.ccb.ynga:id/tv_agree"
 
-        # 华为-设备信息权限
-        allow = By.XPATH,"//*[@text='始终允许']"
+        # # 华为-设备信息权限
+        # allow = By.XPATH,"//*[@text='始终允许']"
 
-        time.sleep(2)
-        # 华为-设备信息权限
-        try:
-            # 华为-设备照片、文件权限
-            self.click(allow)
-        except Exception:
-            #不是华为的跳过
-            pass
-        time.sleep(2)
-        try:
-            for i in range(3):
-                time.sleep(3)
-                self.swipeLeft()
-            # 选择体验，启动向导
-            self.click(appstart)
-            time.sleep(2)
-            try:
-                # 华为-设备照片、文件权限
-                self.click(allow)
-            except Exception:
-                # 不是华为的跳过
-                pass
-            # 同意
-            time.sleep(6)
-            self.click(agree)
-        except Exception:
-            pass
+        # time.sleep(2)
+        # # 华为-设备信息权限
+        # try:
+        #     # 华为-设备照片、文件权限
+        #     self.click(allow)
+        # except Exception:
+        #     #不是华为的跳过
+        #     pass
+        # time.sleep(2)
+        for i in range(3):
+            time.sleep(3)
+            self.scroll_page_one_time("left")
+        # 选择体验，启动向导
+        self.click(appstart)
+        # time.sleep(2)
+        # try:
+        #     # 华为-设备照片、文件权限
+        #     self.click(allow)
+        # except Exception:
+        #     # 不是华为的跳过
+        #     pass
+        #同意
+        time.sleep(6)
+        self.click(agree)
+
 
     """
     未登陆会弹框确定登陆
@@ -137,9 +135,9 @@ class BaseAction:
         height = self.driver.get_window_size()["height"]
         center_x = width / 2
         center_y = height / 2
-        left_x = width / 4 * 1
+        left_x = width / 10 * 1
         left_y = center_y
-        right_x = width / 4 * 3
+        right_x = width / 10 * 9
         right_y = center_y
         top_x = center_x
         top_y = height / 4 * 1
@@ -150,9 +148,11 @@ class BaseAction:
         elif direction == "down":
             self.driver.swipe(top_x, top_y, bottom_x, bottom_y, 3000)
         elif direction == "left":
-            self.driver.swipe(right_x, right_y, left_x, left_y, 3000)
+            self.driver.swipe(right_x, right_y, left_x, left_y, 1000)
         elif direction == "right":
             self.driver.swipe(left_x, left_y, right_x, right_y, 3000)
+        else:
+            raise Exception("请检查参数是否正确，up/down/left/right")
 
     def find_element_with_scroll(self, feature, direction="up"):
         """
@@ -175,16 +175,3 @@ class BaseAction:
                     print("到底了")
                     break
                 page_source = self.driver.page_source
-
-    # 向左滑动
-    def swipeLeft(self):
-        l = self.getSize()
-        x1 = int(l[0] * 0.9)
-        y1 = int(l[1] * 0.5)
-        x2 = int(l[0] * 0.1)
-        self.driver.swipe(x1, y1, x2, y1)
-
-    def getSize(self):
-        x = self.driver.get_window_size()['width']
-        y = self.driver.get_window_size()['height']
-        return (x, y)

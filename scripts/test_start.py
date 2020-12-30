@@ -9,18 +9,19 @@ from base.base_analyze import analyze_file
 class TestStart:
 
     def setup(self):
-        self.driver = init_driver()
+        self.driver = init_driver(no_reset=False)
         self.page = Page(self.driver)
 
     def teardown(self):
         time.sleep(3)
         self.driver.quit()
 
+
     def test_start(self):
         #选择体验，启动向导
         self.page.start.skip_start()
 
-    def test_area(self):
+    def test_area(self,args):
         time.sleep(6)
         # 点击左上角地区
         self.driver.find_element_by_id("llbt.ccb.ynga:id/ll").click()
