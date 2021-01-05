@@ -1,6 +1,7 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 import time
+
 class BaseAction:
 
     def __init__(self, driver):
@@ -32,9 +33,12 @@ class BaseAction:
 
     def skip_start(self):
         # 选择体验
-        appstart = By.ID, "llbt.ccb.ynga:id/bt_appstart_skip"
+        appstart = By.ID,"llbt.ccb.ynga:id/bt_appstart_skip"
         # 同意
-        agree = By.ID, "llbt.ccb.ynga:id/tv_agree"
+        agree = By.ID,"llbt.ccb.ynga:id/tv_agree"
+        # 我知道了
+        known = By.XPATH,"//*[@text='我知道了']"
+
 
         # # 华为-设备信息权限
         # allow = By.XPATH,"//*[@text='始终允许']"
@@ -48,21 +52,30 @@ class BaseAction:
         #     #不是华为的跳过
         #     pass
         # time.sleep(2)
-        for i in range(3):
-            time.sleep(3)
-            self.scroll_page_one_time("left")
-        # 选择体验，启动向导
-        self.click(appstart)
-        # time.sleep(2)
-        # try:
-        #     # 华为-设备照片、文件权限
-        #     self.click(allow)
-        # except Exception:
-        #     # 不是华为的跳过
-        #     pass
-        #同意
-        time.sleep(6)
-        self.click(agree)
+
+        time.sleep(2)
+        # 权限我知道了
+        try:
+            self.click(known)
+            time.sleep(2)
+            for i in range(3):
+                time.sleep(3)
+                self.scroll_page_one_time("left")
+            # 选择体验，启动向导
+            self.click(appstart)
+            # time.sleep(2)
+            # try:
+            #     # 华为-设备照片、文件权限
+            #     self.click(allow)
+            # except Exception:
+            #     # 不是华为的跳过
+            #     pass
+            # 同意
+            time.sleep(8)
+            self.click(agree)
+        except Exception:
+            pass
+
 
 
     """
@@ -121,6 +134,14 @@ class BaseAction:
         else:
             raise Exception("toast未出现，请检查参数是否正确或toast有没有出现在屏幕上")
 
+    def is_feature_exist(self,feature):
+        try:
+            self.find_element(feature)
+            return True
+        except TimeoutException:
+            return False
+
+    # noinspection PyInterpreter
     def scroll_page_one_time(self, direction="up"):
         """
         滑动一次屏幕
@@ -175,3 +196,24 @@ class BaseAction:
                     print("到底了")
                     break
                 page_source = self.driver.page_source
+
+    def is_keyword_in_page_source(self,keyword,timeout=10,poll=0.1):
+        """
+        如果keyword在page_source中，那么返回Ture
+        如果keyword不在page_source中，那么返回False
+        :param keyword: 关键字符串
+        :param timeout: 超时时间默认为10秒
+        :param poll: 频率，默然为0.1秒
+        :return:
+        """
+        #结束时间
+        end_time = time.time() + timeout
+
+        while True:
+            #如果结束时间大于当前时间，那么就任务超时了
+            if end_time < time.time():
+                return False
+            if keyword in self.driver.page_source:
+                return True
+
+            time.sleep(poll)

@@ -1,10 +1,12 @@
 import time
 import yaml
 import pytest
+import allure
 from base.base_driver import init_driver
 from page.page import Page
 from base.base_analyze import analyze_file
 
+@allure.feature('登录功能')
 class TestLogin:
 
     def setup(self):
@@ -16,6 +18,7 @@ class TestLogin:
         self.driver.quit()
 
     @pytest.mark.parametrize("args",analyze_file("login_data.yaml","test_login"))
+    @allure.story('首页 我的 登录')
     def test_login(self,args):
         #解析yaml数据
         username = args["username"]
@@ -45,4 +48,5 @@ class TestLogin:
 
 
 #allure generate report/ -o report/html --clean
+#pytest --html=./report/report.html --self-contained-html
 #hrnecrerpkftbjih

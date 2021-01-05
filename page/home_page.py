@@ -1,17 +1,31 @@
 from selenium.webdriver.common.by import By
 from base.base_action import BaseAction
+import allure
+import time
 
 class HomePage(BaseAction):
 
     #我的
     me_button = By.ID,"llbt.ccb.ynga:id/iv_tab_icon"
     # 未登录显示"点击登录"
-    no_login_button = By.XPATH, "//*[@text='点击登录']"
+    no_login_button = By.XPATH,"//*[@text='点击登录']"
+    #更多服务
+    moreservice = By.ID,"llbt.ccb.ynga:id/tv_name44"
+    #云南健康码
+    jiankangma = By.ID,"llbt.ccb.ynga:id/tv_name1"
+    #选择地区
+    area =  By.ID,"llbt.ccb.ynga:id/ll"
+
+    km_area = By.XPATH,"//*[@text='昆明市']"
+    wh_area = By.XPATH,"//*[@text='五华区']"
+    quereng = By.XPATH,"//*[@text='确认']"
 
     #点击我的
+    @allure.step(title='主页点击我的')
     def click_me(self):
         self.click_tab(self.me_button,3)
 
+    @allure.step(title='主页登录（如果没有登录的话）')
     def login_if_not(self,page):
         #判断登录状态
         self.click_me()
@@ -29,5 +43,33 @@ class HomePage(BaseAction):
         except Exception:
             pass
 
+    @allure.step(title='从主页更多服务进入')
+    def clickJangKangMa(self):
+        self.click(self.jiankangma)
+
+    @allure.step(title='选择地区')
+    def clickArea(self):
+        self.click(self.area)
+        time.sleep(4)
+        # 昆明市
+        self.find_element(self.km_area).click()
+        time.sleep(3)
+        self.find_element(self.wh_area).click()
+        time.sleep(2)
+        self.find_element(self.quereng).click()
+
+    def checkTopByNameFromMoreService(self, text):
+        topname = By.XPATH, "//*[@text='" + text + "']"
+        time.sleep(3)
+        # 更多服务
+        self.click(self.moreservice)
+        time.sleep(3)
+        self.find_element_with_scroll(topname).click()
+        time.sleep(6)
+
+    @allure.step(title='获取toast内容')
+    def get_toast_text(self,name):
+        topname = By.XPATH, "//*[@text='" + name + "']"
+        return self.find_element(topname).text
 
 

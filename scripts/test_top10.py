@@ -1,13 +1,23 @@
 import time
 import yaml
 import pytest
+import allure
 from base.base_driver import init_driver
 from page.page import Page
 from base.base_action import BaseAction
 from base.base_analyze import analyze_file
+from base.base_analyze import read_excel_sheet_row_data
+from base.base_analyze import save_excel_sheet
+
+matter_list = read_excel_sheet_row_data()
+normal = "正常"
+fail = "失败"
+print("TestTop10:================")
+print(matter_list)
 
 
-class TestTop10():
+@allure.feature('top10功能')
+class TestTop10:
 
     def setup(self):
         self.driver = init_driver()
@@ -18,91 +28,119 @@ class TestTop10():
         self.driver.quit()
 
     @pytest.mark.parametrize("args", analyze_file("login_data.yaml", "test_login"))
-    def test_top1(self,args):
-        # 解析yaml数据
-        username = args["username"]
-        password = args["password"]
-        # 选择体验，启动向导
-        # self.page.start.skip_start()
-        self.checkTopByName("公积金信息查询")
-        # 如果未登陆则登陆,再点击
+    @pytest.mark.skipif('公积金信息查询' not in matter_list, reason="skip")
+    def test_top1(self, args):
         try:
-            self.page.login.confirm_login(username, password)
-            time.sleep(3)
-            # 公积金信息查询
-            self.driver.find_element_by_xpath("//*[@text='公积金信息查询']").click()
-        except Exception:
-            pass
-        time.sleep(6)
-        # 退回主页面
-        self.driver.find_element_by_id("llbt.ccb.ynga:id/backbtn").click()
-        time.sleep(1)
-
-    def test_top2(self):
-        self.checkTopByName("查城镇职工养老保险缴费")
-
-    def test_top3(self):
-        self.checkTopByName("公积金明细查询")
-
-    def test_top4(self):
-        self.checkTopByName("事业单位招聘")
-
-    def test_top5(self):
-        self.checkTopByName("查重名")
-
-    def test_top6(self):
-        self.checkTopByName("查行政区划")
-
-    def test_top7(self):
-        self.checkTopByName("行驶证二维码")
-
-    def test_top8(self):
-        self.checkTopByName("律师律所查询")
-
-    def test_top9(self):
-        self.checkTopByName("查出入境业务办理进度")
-
-    def test_top10(self):
-        self.checkTopByName("驾驶证二维码")
-
-    def checkTopByName(self,text):
-        time.sleep(3)
-        # 更多服务
-        self.driver.find_element_by_id("llbt.ccb.ynga:id/tv_name44").click()
-        time.sleep(3)
-        self.find_matter_with_slide("//*[@text='"+text+"']")
-        time.sleep(6)
-
-    def getSize(self):
-        x = self.driver.get_window_size()['width']
-        y = self.driver.get_window_size()['height']
-        return (x, y)
-
-
-    def swipeDown(self):
-        l = self.getSize()
-        x1 = int(l[0] * 0.5)
-        y1 = int(l[1] * 0.5)
-        y2 = int(l[1] * 0.1)
-        time.sleep(1)
-        self.driver.swipe(x1, y1, x1, y2)
-
-    def back_to_top(self):
-        count = 0
-        l = self.getSize()
-        x1 = int(l[0] * 0.5)
-        y1 = int(l[1] * 0.1)
-        y2 = int(l[1] * 0.9)
-        time.sleep(1)
-        while count < 5:
-            self.driver.swipe(x1, y1, x1, y2)
-            time.sleep(3)
-            count += 1
-
-    def find_matter_with_slide(self, element):
-        while True:
+            matter = "公积金信息查询"
+            # 解析yaml数据
+            username = args["username"]
+            password = args["password"]
+            # #选择体验，启动向导save_docx
+            # self.page.start.skip_start()
+            self.page.home.checkTopByNameFromMoreService(matter)
+            # 如果未登陆则登陆,再点击
             try:
-                self.driver.find_element_by_xpath(element).click()
-                break
+                self.page.login.confirm_login(username, password)
+                time.sleep(3)
+                # 公积金信息查询
+                self.page.home.checkTopByNameFromMoreService(matter)
             except Exception:
-                self.swipeDown()
+                pass
+            # time.sleep(6)
+            # 退回主页面
+            # self.driver.find_element_by_id("llbt.ccb.ynga:id/backbtn").click()
+            # time.sleep(1)
+            save_excel_sheet(2, matter_list, matter, normal, "")
+        except Exception:
+            save_excel_sheet(2, matter_list, matter, fail, "开小差")
+            assert False
+
+    @pytest.mark.skipif('查城镇职工养老保险缴费' not in matter_list, reason="skip")
+    def test_top2(self):
+        try:
+            matter = "查城镇职工养老保险缴费"
+            self.page.home.checkTopByNameFromMoreService(matter)
+            save_excel_sheet(2, matter_list, matter, normal, "")
+        except Exception:
+            save_excel_sheet(2, matter_list, matter, fail, "开小差")
+            assert False
+
+    # @pytest.mark.skipif('公积金明细查询' not in matter_list, reason="skip")
+    # def test_top3(self):
+    #     try:
+    #         matter = "公积金明细查询"
+    #         self.page.home.checkTopByNameFromMoreService(matter)
+    #         save_excel_sheet(2, matter_list, matter, normal, "")
+    #     except Exception:
+    #         save_excel_sheet(2, matter_list, matter, fail, "开小差")
+    #         assert False
+    #
+    # @pytest.mark.skipif('事业单位招聘' not in matter_list, reason="skip")
+    # def test_top4(self):
+    #     try:
+    #         matter = "事业单位招聘"
+    #         self.page.home.checkTopByNameFromMoreService(matter)
+    #         save_excel_sheet(2, matter_list, matter, normal, "")
+    #     except Excetion:
+    #         save_excel_sheet(2, matter_list, matter, fail, "开小差")
+    #         assert False
+    #
+    # @pytest.mark.skipif('查重名' not in matter_list, reason="skip")
+    # def test_top5(self):
+    #     try:
+    #         matter = "查重名"
+    #         self.page.home.checkTopByNameFromMoreService(matter)
+    #         save_excel_sheet(2, matter_list, matter, normal, "")
+    #     except Excetion:
+    #         save_excel_sheet(2, matter_list, matter, fail, "开小差")
+    #         assert False
+    #
+    # @pytest.mark.skipif('查行政区划' not in matter_list, reason="skip")
+    # def test_top6(self):
+    #     try:
+    #         matter = "查行政区划"
+    #         self.page.home.checkTopByNameFromMoreService(matter)
+    #         save_excel_sheet(2, matter_list, matter, normal, "")
+    #     except Excetion:
+    #         save_excel_sheet(2, matter_list, matter, fail, "开小差")
+    #         assert False
+    #
+    # @pytest.mark.skipif('行驶证二维码' not in matter_list, reason="skip")
+    # def test_top7(self):
+    #     try:
+    #         matter = "行驶证二维码"
+    #         self.page.home.checkTopByNameFromMoreService(matter)
+    #         save_excel_sheet(2, matter_list, matter, normal, "")
+    #     except Exception:
+    #         save_excel_sheet(2, matter_list, matter, fail, "开小差")
+    #         assert False
+    #
+    # @pytest.mark.skipif('律师律所查询' not in matter_list, reason="skip")
+    # def test_top8(self):
+    #     try:
+    #         matter = "律师律所查询"
+    #         self.page.home.checkTopByNameFromMoreService(matter)
+    #         save_excel_sheet(2, matter_list, matter, normal, "")
+    #     except Exception:
+    #         save_excel_sheet(2, matter_list, matter, fail, "开小差")
+    #         assert False
+    #
+    # @pytest.mark.skipif('查出入境业务办理进度' not in matter_list, reason="skip")
+    # def test_top9(self):
+    #     try:
+    #         matter = "查出入境业务办理进度"
+    #         self.page.home.checkTopByNameFromMoreService(matter)
+    #         save_excel_sheet(2, matter_list, matter, normal, "")
+    #     except Exception:
+    #         save_excel_sheet(2, matter_list, matter, fail, "开小差")
+    #         assert False
+    #
+    # @pytest.mark.skipif('驾驶证二维码' not in matter_list, reason="skip")
+    # def test_top10(self):
+    #     try:
+    #         matter = "驾驶证二维码"
+    #         self.page.home.checkTopByNameFromMoreService(matter)
+    #         save_excel_sheet(2, matter_list, matter, normal, "")
+    #     except Exception:
+    #         save_excel_sheet(2, matter_list, matter, fail, "开小差")
+    #         assert False
