@@ -13,8 +13,8 @@ from base.base_analyze import save_docx
 matter_list = read_excel_sheet_row_data()
 normal = "正常"
 fail = "失败"
-print("TestStart:================")
-print(matter_list)
+# print("TestStart:================")
+# print(matter_list)
 
 @allure.feature('启动-首页选择地区-健康码功能')
 class TestStart:

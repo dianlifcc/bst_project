@@ -12,7 +12,7 @@ from base.base_analyze import save_excel_sheet
 matter_list = read_excel_sheet_row_data()
 normal = "正常"
 fail = "失败"
-print("TestTop10:================")
+print("=======================================================本次巡检事项===================================================")
 print(matter_list)
 
 
