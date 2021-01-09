@@ -43,9 +43,9 @@ class TestStart:
             matter = "首页-地区选择"
             # 点击左上角地区
             self.page.home.clickArea()
-            save_excel_sheet(1,matter_list,matter,normal,"")
+            save_excel_sheet(1, matter_list, matter, normal,"")
         except Exception:
-            save_excel_sheet(1,matter_list, matter, fail,"开小差")
+            save_excel_sheet(1, matter_list, matter, fail,"开小差")
             assert False
 
 
