@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 from base.base_action import BaseAction
 import allure
 import time
+import os
 
 class HomePage(BaseAction):
 
@@ -19,6 +20,10 @@ class HomePage(BaseAction):
     km_area = By.XPATH,"//*[@text='昆明市']"
     wh_area = By.XPATH,"//*[@text='五华区']"
     quereng = By.XPATH,"//*[@text='确认']"
+
+    #首页-搜索
+    home_search = By.ID,"llbt.ccb.ynga:id/tv_serarch"
+    home_search_input = By.XPATH,"//*[@text='请输入关键字搜索']"
 
     #点击我的
     @allure.step(title='主页点击我的')
@@ -42,6 +47,31 @@ class HomePage(BaseAction):
             page.login.click_login()
         except Exception:
             pass
+
+    @allure.step(title='点击首页-搜索')
+    def clickHomeSearch(self,content):
+        keyword = By.XPATH, "//*[@text='" + content + "']"
+        keyword2 = By.XPATH, "//*[@text='搜索']"
+
+        time.sleep(2)
+        self.click(self.home_search)
+        os.system('adb shell ime set com.sohu.inputmethod.sogou.vivo/.SogouIME')
+        self.find_element_with_scroll(self.home_search_input).click()
+        time.sleep(2)
+        self.input(self.home_search_input, content)
+
+        time.sleep(2)
+        self.find_element_with_scroll(keyword).click()
+
+
+        time.sleep(2)
+        self.driver.press_keycode(66)
+        time.sleep(2)
+        self.driver.press_keycode(66)
+        # self.driver.press_keycode(66)
+        # self.find_element_with_scroll(keyword).click()
+        # self.driver.press_keycode(66)
+        time.sleep(3)
 
     @allure.step(title='从主页更多服务进入')
     def clickJangKangMa(self):
